@@ -8,10 +8,13 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducers from './reducers';
 
+import { StaticRouter } from 'react-router';
+
 import Html from './components/Html';
-import App from './components/App';
+import App from './components/Home';
 
 const app = express();
+const port = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname)));
 
@@ -19,13 +22,16 @@ app.get('*', async (req, res) => {
 	const scripts = ['vendor.js', 'client.js'];
 
 	const initialState = { initialText: "rendered on the server" };
+	const contex = {};
 
 	const store = createStore(reducers, initialState);
 
 	const appMarkup = ReactDOMServer.renderToString(
-		<Provider store={store}>
-			<App />
-		</Provider>
+		<StaticRouter location={req.url} context={context}>
+			<Provider store={store}>
+				<App />
+			</Provider>
+		</StaticRouter>
 	);
 	const html = ReactDOMServer.renderToStaticMarkup(
 		<Html children={appMarkup}
@@ -37,7 +43,7 @@ app.get('*', async (req, res) => {
 	res.send(`<!doctype html>${html}`);
 });
 
-app.listen(3000, () => console.log('Listening on localhost:3000'));
+app.listen(port, () => console.log('Listening on localhost:3000'));
 
 
 
