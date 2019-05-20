@@ -1,45 +1,24 @@
+import React from 'react';
+import { Route, Link, Switch } from 'react-router-dom';
+import Home from './Home';
+import About from './About';
 
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux';
+const App = (props) => {
+	return (
+		<div>
+			<ul>
+				<li><Link to="/">Home</Link></li>
+				<li><Link to="/about">About</Link></li>
+			</ul>
 
- class App extends Component {
-	static propTypes = {
-		initialText: PropTypes.string.isRequired,
-		changeText: PropTypes.func.isRequired
-	}
-	// constructor(props) {
-	// 	super(props);
-	// 	this.state = { text: this.props.initialText };
-	// }
-	// onButtonClick = (event) => {
-	// 	event.preventDefault();
-	// 	this.setState({ text: 'changed in the browser!' });
-	// }
-	onButtonClick = (event) => {
-		event.preventDefault();
-		this.props.changeText();
-	}
+			<hr />
 
-	render() {
-		const { onButtonClick } = this
-		return (
-			<div>
-				{/* <p>{this.state.text}</p> */}
-				<p>{this.props.initialText}</p>
-				<button onClick={onButtonClick}>change text!</button>
-			</div>
-		)
-	}
-}
-
-const mapStateToProps = (state) => {
-	return { ...state };
-};
-const mapDispatchToProps = (dispatch) => {
-	return {
-		changeText: () => dispatch({ type: 'CHANGE_TEXT' })
-	};
+			<Switch>
+				<Route path="/about" component={About} />
+				<Route path="/" component={Home} />
+			</Switch>
+		</div>
+	);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
